@@ -1,10 +1,23 @@
 public class Notification {
-    public final String subject;
-    public final String body;
-    public final String email;
-    public final String phone;
+    private final String to;
+    private final String subject;
+    private final String body;
 
-    public Notification(String subject, String body, String email, String phone) {
-        this.subject = subject; this.body = body; this.email = email; this.phone = phone;
+    public Notification(String to, String subject, String body) {
+        this.to = to;
+        this.subject = subject;
+        this.body = body;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public String getBody() {
+        return body;
     }
 }

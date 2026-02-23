@@ -1,21 +1,39 @@
 public class Main {
+
     public static void main(String[] args) {
+
         System.out.println("=== Notification Demo ===");
+
         AuditLog audit = new AuditLog();
 
-        Notification n = new Notification("Welcome", "Hello and welcome to SST!", "riya@sst.edu", "9876543210");
+        Notification emailNotification =
+                new Notification("riya@sst.edu",
+                        "Welcome",
+                        "Hello and welcome to SST!");
 
-        NotificationSender email = new EmailSender(audit);
-        NotificationSender sms = new SmsSender(audit);
-        NotificationSender wa = new WhatsAppSender(audit);
+        Notification smsNotification =
+                new Notification("9876543210",
+                        "Welcome",
+                        "Hello and welcome to SST!");
 
-        email.send(n);
-        sms.send(n);
+        Notification waNotification =
+                new Notification("9876543210",
+                        "Welcome",
+                        "Hello and welcome to SST!");
+
+        NotificationSender emailSender = new EmailSender(audit);
+        NotificationSender smsSender = new SmsSender(audit);
+        NotificationSender waSender =
+                new WhatsAppSender(audit, new E164Validator());
+
+        emailSender.send(emailNotification);
+        smsSender.send(smsNotification);
+
         try {
-            wa.send(n);
-        } catch (RuntimeException ex) {
-            System.out.println("WA ERROR: " + ex.getMessage());
-            audit.add("WA failed");
+            waSender.send(waNotification);
+        } catch (IllegalArgumentException e) {
+            System.out.println("WA ERROR: " + e.getMessage());
+            audit.record("WA ERROR");
         }
 
         System.out.println("AUDIT entries=" + audit.size());
